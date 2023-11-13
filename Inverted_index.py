@@ -8,6 +8,7 @@ import math
 import operator
 import sys
 from statistics import mean
+nltk.download('punkt')
 
 def tokenize_and_remove_punctuations(s):
     translator = str.maketrans('','',string.punctuation)
@@ -151,18 +152,18 @@ def find_precision_recall(relevances, docList):
     return precision, recall
 
 #main method
-args = sys.argv
+#args = sys.argv
 
-data = read_data(args[1])
+data = read_data("D:\Individual\paper\paper6\\test\cranfieldDocs")
 preprocessed_data = preprocess_data(data)
-queries = preprocess_queries(args[2])
+queries = preprocess_queries("D:\Individual\paper\paper6\\test\queries.txt")
 inverted_index = generate_inverted_index(preprocessed_data)
 
 idf_scores = calculate_idf(preprocessed_data)
 scores = calculate_tfidf(preprocessed_data,idf_scores)
 query_scores = calculate_tfidf_queries(queries,idf_scores)
 
-relevances = get_relevance(args[3])
+relevances = get_relevance("D:\Individual\paper\paper6\\test\\relevance.txt")
 
 query_docs = {}
 for key, value in queries.items():
