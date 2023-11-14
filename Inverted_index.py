@@ -156,96 +156,127 @@ def find_precision_recall(relevances, docList):
 
 data = read_data("D:\Individual\paper\paper6\\test\cranfieldDocs")
 preprocessed_data = preprocess_data(data)
-queries = preprocess_queries("D:\Individual\paper\paper6\\test\queries.txt")
-inverted_index = generate_inverted_index(preprocessed_data)
+# Remove duplicates
+set_preprocessed_data = set()
+for value in preprocessed_data.values():
+    for i in value:
+        set_preprocessed_data.add(i)
+keyword_id = {}
+for item in set_preprocessed_data:
+    va = []
+    for key in preprocessed_data.keys():
+        for value in preprocessed_data.get(key):
+            if item in value:
+                va.append(str(key))
+                continue;
+    keyword_id.setdefault(item, va)
 
-idf_scores = calculate_idf(preprocessed_data)
-scores = calculate_tfidf(preprocessed_data,idf_scores)
-query_scores = calculate_tfidf_queries(queries,idf_scores)
+# print(set_preprocessed_data)
+# write preprocessed_data to id_keywordmap.txt
 
-relevances = get_relevance("D:\Individual\paper\paper6\\test\\relevance.txt")
+#todo 明天debug看keyword_id形式，写入文件报错ValueError: too many values to unpack
+filename = open('D:\Individual\paper\paper6\\test\keyword_idmap.txt','w')#dict转txt
+for k,v in keyword_id:
+    filename.write(str(k)+':'+str(v))
+    filename.write('\n')
+filename.close()
 
-query_docs = {}
-for key, value in queries.items():
-    doc_sim = {}
-    for term in value:
-        if term in inverted_index.keys():
-            docs = inverted_index[term]
-            for doc in docs:
-                doc_score = scores[doc][term]
-                doc_length = math.sqrt(sum(x ** 2 for x in scores[doc].values()))
-                query_score = query_scores[key][term]
-                query_length = math.sqrt(sum(x ** 2 for x in query_scores[key].values()))
-                cosine_sim = (doc_score * query_score) / (doc_length * query_length)
-                if doc in doc_sim.keys():
-                    doc_sim[doc] += cosine_sim
-                else:
-                    doc_sim[doc] = cosine_sim
-    ranked = sorted(doc_sim.items(), key=operator.itemgetter(1), reverse=True)
-    query_docs[key] = ranked
 
-print("Evaluating your queries...")
-print("----------------------------------------------------------------")
-print("Top 10 documents in rank list")
-# top 10 docs
-precisions = []
-recalls = []
-for i in range(1, len(query_docs) + 1):
-    docs = query_docs[i][:10]
-    doc_list = [x[0] for x in docs]
-    precision, recall = find_precision_recall(relevances[i], doc_list)
-    precisions.append(precision)
-    recalls.append(recall)
-    print("Query: " + str(i) + " \t Pr: " + str(precision) + " \t Re:" + str(recall))
 
-print("Avg precision: " + str(mean(precisions)))
-print("Avg recall: " + str(mean(recalls)))
-print("----------------------------------------------------------------")
 
-# top 50
-print("Top 50 documents in rank list")
-precisions = []
-recalls = []
-for i in range(1, len(query_docs) + 1):
-    docs = query_docs[i][:50]
-    doc_list = [x[0] for x in docs]
-    precision, recall = find_precision_recall(relevances[i], doc_list)
-    precisions.append(precision)
-    recalls.append(recall)
-    print("Query: " + str(i) + " \t Pr: " + str(precision) + " \t Re:" + str(recall))
 
-print("Avg precision: " + str(mean(precisions)))
-print("Avg recall: " + str(mean(recalls)))
-print("----------------------------------------------------------------")
 
-# top 100
-print("Top 100 documents in rank list")
-precisions = []
-recalls = []
-for i in range(1, len(query_docs) + 1):
-    docs = query_docs[i][:100]
-    doc_list = [x[0] for x in docs]
-    precision, recall = find_precision_recall(relevances[i], doc_list)
-    precisions.append(precision)
-    recalls.append(recall)
-    print("Query: " + str(i) + " \t Pr: " + str(precision) + " \t Re:" + str(recall))
 
-print("Avg precision: " + str(mean(precisions)))
-print("Avg recall: " + str(mean(recalls)))
-print("----------------------------------------------------------------")
+# queries = preprocess_queries("D:\Individual\paper\paper6\\test\queries.txt")
+# inverted_index = generate_inverted_index(preprocessed_data)
+#
+# idf_scores = calculate_idf(preprocessed_data)
+# scores = calculate_tfidf(preprocessed_data,idf_scores)
+# query_scores = calculate_tfidf_queries(queries,idf_scores)
+#
+# relevances = get_relevance("D:\Individual\paper\paper6\\test\\relevance.txt")
 
-# top 500
-print("Top 500 documents in rank list")
-precisions = []
-recalls = []
-for i in range(1, len(query_docs) + 1):
-    docs = query_docs[i][:500]
-    doc_list = [x[0] for x in docs]
-    precision, recall = find_precision_recall(relevances[i], doc_list)
-    precisions.append(precision)
-    recalls.append(recall)
-    print("Query: " + str(i) + " \t Pr: " + str(precision) + " \t Re:" + str(recall))
-
-print("Avg precision: " + str(mean(precisions)))
-print("Avg recall: " + str(mean(recalls)))
-print("----------------------------------------------------------------")
+# query_docs = {}
+# for key, value in queries.items():
+#     doc_sim = {}
+#     for term in value:
+#         if term in inverted_index.keys():
+#             docs = inverted_index[term]
+#             for doc in docs:
+#                 doc_score = scores[doc][term]
+#                 doc_length = math.sqrt(sum(x ** 2 for x in scores[doc].values()))
+#                 query_score = query_scores[key][term]
+#                 query_length = math.sqrt(sum(x ** 2 for x in query_scores[key].values()))
+#                 cosine_sim = (doc_score * query_score) / (doc_length * query_length)
+#                 if doc in doc_sim.keys():
+#                     doc_sim[doc] += cosine_sim
+#                 else:
+#                     doc_sim[doc] = cosine_sim
+#     ranked = sorted(doc_sim.items(), key=operator.itemgetter(1), reverse=True)
+#     query_docs[key] = ranked
+#
+# print("Evaluating your queries...")
+# print("----------------------------------------------------------------")
+# print("Top 10 documents in rank list")
+# # top 10 docs
+# precisions = []
+# recalls = []
+# for i in range(1, len(query_docs) + 1):
+#     docs = query_docs[i][:10]
+#     doc_list = [x[0] for x in docs]
+#     precision, recall = find_precision_recall(relevances[i], doc_list)
+#     precisions.append(precision)
+#     recalls.append(recall)
+#     print("Query: " + str(i) + " \t Pr: " + str(precision) + " \t Re:" + str(recall))
+#
+# print("Avg precision: " + str(mean(precisions)))
+# print("Avg recall: " + str(mean(recalls)))
+# print("----------------------------------------------------------------")
+#
+# # top 50
+# print("Top 50 documents in rank list")
+# precisions = []
+# recalls = []
+# for i in range(1, len(query_docs) + 1):
+#     docs = query_docs[i][:50]
+#     doc_list = [x[0] for x in docs]
+#     precision, recall = find_precision_recall(relevances[i], doc_list)
+#     precisions.append(precision)
+#     recalls.append(recall)
+#     print("Query: " + str(i) + " \t Pr: " + str(precision) + " \t Re:" + str(recall))
+#
+# print("Avg precision: " + str(mean(precisions)))
+# print("Avg recall: " + str(mean(recalls)))
+# print("----------------------------------------------------------------")
+#
+# # top 100
+# print("Top 100 documents in rank list")
+# precisions = []
+# recalls = []
+# for i in range(1, len(query_docs) + 1):
+#     docs = query_docs[i][:100]
+#     doc_list = [x[0] for x in docs]
+#     precision, recall = find_precision_recall(relevances[i], doc_list)
+#     precisions.append(precision)
+#     recalls.append(recall)
+#     print("Query: " + str(i) + " \t Pr: " + str(precision) + " \t Re:" + str(recall))
+#
+# print("Avg precision: " + str(mean(precisions)))
+# print("Avg recall: " + str(mean(recalls)))
+# print("----------------------------------------------------------------")
+#
+# # top 500
+# print("Top 500 documents in rank list")
+# precisions = []
+# recalls = []
+# for i in range(1, len(query_docs) + 1):
+#     docs = query_docs[i][:500]
+#     doc_list = [x[0] for x in docs]
+#     precision, recall = find_precision_recall(relevances[i], doc_list)
+#     precisions.append(precision)
+#     recalls.append(recall)
+#     print("Query: " + str(i) + " \t Pr: " + str(precision) + " \t Re:" + str(recall))
+#
+# print("Avg precision: " + str(mean(precisions)))
+# print("Avg recall: " + str(mean(recalls)))
+# print("----------------------------------------------------------------")
