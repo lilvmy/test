@@ -154,41 +154,52 @@ def find_precision_recall(relevances, docList):
 #main method
 #args = sys.argv
 
-data = read_data("D:\Individual\paper\paper6\\test\cranfieldDocs")
+data = read_data("/home/cysren/Desktop/lilvmy/Tfvt/cranfieldDocs")
+# the format of preprocessed_data is {id_i:[w_i1,w_i2,....w_in]}
 preprocessed_data = preprocess_data(data)
-# Remove duplicates
-set_preprocessed_data = set()
-for value in preprocessed_data.values():
-    for i in value:
-        set_preprocessed_data.add(i)
-keyword_id = {}
-for item in set_preprocessed_data:
-    va = []
-    for key in preprocessed_data.keys():
-        for value in preprocessed_data.get(key):
-            if item in value:
-                va.append(str(key))
-                continue;
-    keyword_id.setdefault(item, va)
 
-# print(set_preprocessed_data)
-# write preprocessed_data to id_keywordmap.txt
+# # Remove duplicates of preprocessed_data
+# # The format of set_preprocessed_data is the list of keywords W
+# set_preprocessed_data = set()
+# for value in preprocessed_data.values():
+#     for i in value:
+#         set_preprocessed_data.add(i)
 
-#todo 明天debug看keyword_id形式，写入文件报错ValueError: too many values to unpack
-filename = open('D:\Individual\paper\paper6\\test\keyword_idmap.txt','w')#dict转txt
-for k,v in keyword_id:
-    filename.write(str(k)+':'+str(v))
-    filename.write('\n')
-filename.close()
+# # The format of keyword_id is {w_i:[id_i1,id_i2,....id_in]}
+# keyword_id = {}
+# # Iterate through each item in set_preprocessed_data
+# for item in set_preprocessed_data:
+#     va = []  # Initialize an empty list for each item
+#
+#     # Iterate through keys in preprocessed_data
+#     for key in preprocessed_data.keys():
+#         # Iterate through values for each key
+#         for value in preprocessed_data[key]:
+#             # Check if the item is present in the current value
+#             if item in value:
+#                 va.append(str(key))
+#                 break  # Use break to exit the inner loop once the item is found in a value
+#
+#     # Setdefault to associate the item with the list of corresponding keys
+#     keyword_id.setdefault(item, va)
 
-
-
-
-
-
+# # write preprocessed_data to id_keywordmap.txt
+# filename = open('D:\Individual\paper\paper6\\test\keyword_idmap.txt','w')#dict转txt
+# for k,v in keyword_id.items():
+#     filename.write(str(k)+':'+str(v))
+#     filename.write('\n')
+# filename.close()
 
 # queries = preprocess_queries("D:\Individual\paper\paper6\\test\queries.txt")
-# inverted_index = generate_inverted_index(preprocessed_data)
+inverted_index = generate_inverted_index(preprocessed_data)
+# print(inverted_index)
+# write inverted_index to id_keyword_map.txt
+# filename = open('/home/cysren/Desktop/lilvmy/Tfvt/kw_id_map.txt','w')#dict转txt
+# for k,v in inverted_index.items():
+#     filename.write(str(k)+':'+str(v))
+#     filename.write('\n')
+# filename.close()
+
 #
 # idf_scores = calculate_idf(preprocessed_data)
 # scores = calculate_tfidf(preprocessed_data,idf_scores)
