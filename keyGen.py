@@ -1,9 +1,6 @@
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import serialization
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
-from Crypto.Util.Padding import pad, unpad
+
 
 def generate_ec_key():
     # the data owner's private key sk_DO
@@ -67,7 +64,7 @@ def derive_shared_key(sk_DO, pk_DO, sk_U, pk_U):
 
 
 
-if __name__ == "__main__":
-    ss = generate_ec_key()
-    aa = derive_shared_key(ss[0], ss[1], ss[2], ss[3])
-    print(aa)
+# if __name__ == "__main__":
+#     ss = generate_ec_key()
+#     aa = derive_shared_key(ss[0], ss[1], ss[2], ss[3])
+#     print(aa)

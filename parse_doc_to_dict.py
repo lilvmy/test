@@ -154,9 +154,14 @@ def find_precision_recall(relevances, docList):
 #main method
 #args = sys.argv
 
-data = read_data("/home/cysren/Desktop/lilvmy/Tfvt/cranfieldDocs")
-# the format of preprocessed_data is {id_i:[w_i1,w_i2,....w_in]}
-preprocessed_data = preprocess_data(data)
+"""
+Construction inverted index
+"""
+# data = read_data("/home/cysren/Desktop/lilvmy/Tfvt/cranfieldDocs")
+# # # the format of preprocessed_data is {id_i:[w_i1,w_i2,....w_in]}
+# preprocessed_data = preprocess_data(data)
+# inverted_index = generate_inverted_index(preprocessed_data)
+# print(inverted_index)
 
 # # Remove duplicates of preprocessed_data
 # # The format of set_preprocessed_data is the list of keywords W
@@ -191,7 +196,6 @@ preprocessed_data = preprocess_data(data)
 # filename.close()
 
 # queries = preprocess_queries("D:\Individual\paper\paper6\\test\queries.txt")
-inverted_index = generate_inverted_index(preprocessed_data)
 # print(inverted_index)
 # write inverted_index to id_keyword_map.txt
 # filename = open('/home/cysren/Desktop/lilvmy/Tfvt/kw_id_map.txt','w')#dict转txt
