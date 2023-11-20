@@ -157,11 +157,16 @@ def find_precision_recall(relevances, docList):
 """
 Construction inverted index
 """
-# data = read_data("/home/cysren/Desktop/lilvmy/Tfvt/cranfieldDocs")
+if __name__ == "__main__":
+    data = read_data("/home/cysren/Desktop/lilvmy/Tfvt/cranfieldDocs")
 # # # the format of preprocessed_data is {id_i:[w_i1,w_i2,....w_in]}
-# preprocessed_data = preprocess_data(data)
-# inverted_index = generate_inverted_index(preprocessed_data)
-# print(inverted_index)
+    preprocessed_data = preprocess_data(data)
+    inverted_index = generate_inverted_index(preprocessed_data)
+    fileadd = open('/home/cysren/Desktop/lilvmy/Tfvt/kw_ids_map.txt','w')
+    for k,v in inverted_index.items():
+        fileadd.write(str(k) + ':' + str(v))
+        fileadd.write('\n')
+    fileadd.close()
 
 # # Remove duplicates of preprocessed_data
 # # The format of set_preprocessed_data is the list of keywords W
